@@ -1,0 +1,61 @@
+{% extends 'themes/base.html.twig' %}
+
+{% block title %}Liste des contacts{% endblock %}
+
+{% block description %}Voici la liste de mes contacts{% endblock %}
+
+{% block keywords %}contact, agenda, liste{% endblock %}
+
+{% block main %}
+    <h1 class="text-center my-3 display-5">Liste des contacts</h1>
+
+    <div class="d-flex justify-content-end align-items-center my-3">
+        <a href="{{path('app_contact_create')}}" class="btn btn-primary shadow">Nouveau contact</a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Comment</th>
+                    <th>Créé le</th>
+                    <th>Modifié le</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contacts %}
+                    <tr>
+                        <td>{{contact.id}}</td>
+                        <td>{{contact.firstName}}</td>
+                        <td>{{contact.lastName}}</td>
+                        <td>{{contact.email}}</td>
+                        <td>{{contact.phone}}</td>
+                        <td>{{contact.comment}}</td>
+                        <td>{{contact.createdAt|format_datetime()}}</td>
+                        <td>{{contact.updatedAt|format_datetime()}}</td>
+                        <td>
+                            <a href="{{path('app_contact_edit', {'id':contact.id})}}" class="btn btn-sm btn-secondary">Modifier</a>
+                            <form onclick="return confirm('Confirmer la suppression?')" method="POST" action="{{path('app_contact_delete', {'id':contact.id})}}">
+                                <input type="hidden" name="_csrf_token" value="{{csrf_token('delete_contact_'~contact.id)}}">
+                                <input type="submit" class="btn btn-sm btn-danger" value="Supprimer">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

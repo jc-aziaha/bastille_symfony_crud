@@ -1,0 +1,16 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+* {
+    font-family: "Poppins", sans-serif;
+}
+
+nav a, footer p {
+    font-family: "Pacifico", cursive;
+}
